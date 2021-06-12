@@ -1,3 +1,6 @@
+// Add console.log to check to see if our code is working.
+console.log("working");
+
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -18,13 +21,13 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 // Create a base layer that holds both maps.
 let baseMaps = {
     "Streets": streets,
-    "Satellite Streets": satelliteStreets
+    "Satellite": satelliteStreets
 };
 
 // Create the map object with a center and zoom level.
 let map = L.map('mapid', {
-    center: [43.7, -79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets]
 });
 //.setView([30, 30], 2);
@@ -33,7 +36,7 @@ let map = L.map('mapid', {
 L.control.layers(baseMaps).addTo(map);
 
 // Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/luzmariacabral/Mapping_Earthquakes/main/torontoNeighborhoods.json"
+//let torontoHoods = "https://raw.githubusercontent.com/luzmariacabral/Mapping_Earthquakes/main/torontoNeighborhoods.json"
 
 // Accessing the Toronto airline routes GeoJSON URL.
 //let torontoData = "https://raw.githubusercontent.com/luzmariacabral/Mapping_Earthquakes/main/torontoRoutes.json"
@@ -42,21 +45,22 @@ let torontoHoods = "https://raw.githubusercontent.com/luzmariacabral/Mapping_Ear
 //let airportData = "https://raw.githubusercontent.com/luzmariacabral/Mapping_Earthquakes/Mapping_GeoJSON_Points/majorAirports.json";
 
 //Create a style for the lines.
-let myStyle = {
-    color: 'blue',
-    weight: 1,
-    fillColor: 'yellow'
-}
+// let myStyle = {
+//     color: 'blue',
+//     weight: 1,
+//     fillColor: 'yellow'
+// }
 
 // Grabbing our GeoJSON data
-d3.json(torontoHoods).then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
     console.log(data);
     // Creating a GeoJSON layer with the retrieved data.
-    L.geoJson(data, {
-        style: myStyle,
-        onEachFeature: function(feature, layer) {
-            layer.bindPopup("<h3> Naighborhood: " + feature.properties.AREA_NAME);
-        }
-    }).addTo(map);
+    L.geoJson(data).addTo(map);
+    //     , {
+    //     style: myStyle,
+    //     onEachFeature: function(feature, layer) {
+    //         layer.bindPopup("<h3> Naighborhood: " + feature.properties.AREA_NAME);
+    //     }
+    // }).addTo(map);
     
 });
